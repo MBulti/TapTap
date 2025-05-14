@@ -1,8 +1,8 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:taptap/bloc/game_event.dart';
 import 'package:taptap/bloc/game_state.dart';
 
-class GameBloc extends Bloc<GameEvent, GameState> {
+class GameBloc extends HydratedBloc<GameEvent, GameState> {
   GameBloc()
     : super(const GameState(gold: 0, damage: 1, enemyHp: 10, upgradeCost: 10)) {
     on<TapEnemy>((event, emit) {
@@ -26,5 +26,25 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         );
       }
     });
+  }
+  
+@override
+  GameState fromJson(Map<String, dynamic> json) {
+    return GameState(
+      gold: json['gold'] as int,
+      damage: json['damage'] as int,
+      enemyHp: json['enemyHp'] as int,
+      upgradeCost: json['upgradeCost'] as int,
+    );
+  }
+
+  @override
+  Map<String, dynamic> toJson(GameState state) {
+    return {
+      'gold': state.gold,
+      'damage': state.damage,
+      'enemyHp': state.enemyHp,
+      'upgradeCost': state.upgradeCost,
+    };
   }
 }
